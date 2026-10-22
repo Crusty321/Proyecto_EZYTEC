@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Proyecto - Instalación de Cajeros #030-26</title>
+    <style>
+        :root {
+            --primary: #1B4D2E;
+            --primary-dark: #0F2E1B;
+            --primary-light: #226038;
+            --secondary: #3B7A4C;
+            --mint-light: #EDF5F0;
+            --mint-border: #C8DDD0;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-subtle: #E2E8F0;
+            --bg-base: #F1F5F9;
+            --white: #FFFFFF;
+
+            /* Area Colors */
+            --c-infra: #0284c7;
+            --c-maint: #d97706;
+            --c-eglobal: #7c3aed;
+            --c-seguridad: #dc2626;
+            --c-operaciones: #059669;
+            --c-admin: #db2777;
+            --c-contable: #0d9488;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Navigation (Pestaña Izquierda) */
+        .sidebar {
+            width: 290px;
+            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            box-shadow: 4px 0 20px rgba(15, 46, 27, 0.15);
+            z-index: 20;
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem 1.4rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .sidebar-logo {
+            background: var(--white);
+            padding: 8px 12px;
+            border-radius: 10px;
+            width: fit-content;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar-logo img {
+            max-height: 50px;
+            display: block;
+        }
+
+        .sidebar-brand-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #FFFFFF;
+        }
+
+        .sidebar-brand-sub {
+            font-size: 0.75rem;
+            color: #A7F3D0;
+            font-weight: 500;
+        }
+
+        .sidebar-nav {
+            padding: 1.25rem 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .sidebar-section-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #A7F3D0;
+            padding: 0 0.75rem;
+            margin-bottom: 0.35rem;
+            font-weight: 700;
+        }
+
+        .nav-tab {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.85rem;
+            width: 100%;
+            text-align: left;
+            padding: 0.9rem 1rem;
+            border-radius: 10px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.82);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--white);
+        }
+
+        .nav-tab.active {
+            background: var(--white);
+            color: var(--primary-dark);
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-tab-icon {
+            font-size: 1.25rem;
+            line-height: 1.2;
+            flex-shrink: 0;
+        }
+
+        .nav-tab-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .nav-tab-title {
+            font-size: 0.88rem;
+            line-height: 1.25;
+        }
+
+        .nav-tab-desc {
+            font-size: 0.72rem;
+            opacity: 0.75;
+            font-weight: 400;
+        }
+
+        .sidebar-footer {
+            padding: 1.1rem 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(0, 0, 0, 0.15);
+            font-size: 0.76rem;
+            color: #D1FAE5;
+        }
+
+        .sidebar-footer strong {
+            display: block;
+            color: #FFFFFF;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Main Content Area */
+        .main-wrapper {
+            flex: 1;
+            padding: 1.5rem 2rem;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: calc(100vw - 290px);
+        }
+
+        /* Top Header Banner */
+        .top-bar {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-light) 100%);
+            color: var(--white);
+            padding: 1.35rem 1.75rem;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(27, 77, 46, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .top-bar-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.22rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            width: fit-content;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ADE80;
+            box-shadow: 0 0 8px #4ADE80;
+        }
+
+        .top-bar h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .top-bar p {
+            color: #D1FAE5;
+            font-size: 0.88rem;
+        }
+
+        /* View Containers */
+        .tab-view {
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .tab-view.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* KPI Cards Row */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .kpi-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.15rem 1.25rem;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-light);
+        }
+
+        .kpi-card.highlight::after { background: #0284c7; }
+        .kpi-card.warning::after { background: #0d9488; }
+        .kpi-card.purple::after { background: #7c3aed; }
+        .kpi-card.progress-kpi::after { background: #16A34A; }
+
+        .kpi-info {
+            width: 100%;
+            padding-right: 0.5rem;
+        }
+
+        .kpi-info .kpi-label {
+            font-size: 0.74rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .kpi-info .kpi-value {
+            font-size: 1.28rem;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .kpi-info .kpi-sub {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .kpi-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #E2E8F0;
+            border-radius: 999px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .kpi-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #16A34A, #22C55E);
+            border-radius: 999px;
+            width: 33.1%;
+        }
+
+        .kpi-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--mint-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        /* Apartado % de Avance Diario */
+        .progress-notice {
+            background: linear-gradient(90deg, #ECFDF5 0%, #F0FDF4 100%);
+            border: 1px solid #86EFAC;
+            border-left: 5px solid #16A34A;
+            border-radius: 10px;
+            padding: 0.9rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .progress-notice-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #14532D;
+            font-size: 0.88rem;
+        }
+
+        .progress-notice-icon {
+            background: #16A34A;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .progress-notice-badge {
+            background: #DCFCE7;
+            color: #166534;
+            border: 1px solid #86EFAC;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        /* Dashboard Section Panel */
+        .panel {
+            background: var(--white);
+            border-radius: 14px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+            padding: 1.5rem 1.75rem;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.85rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .panel-title::before {
+            content: '';
+            display: inline-block;
+            width: 5px;
+            height: 20px;
+            background-color: var(--secondary);
+            border-radius: 4px;
+        }
+
+        /* Timeline Banner inside Gantt */
+        .milestone-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            background: #F8FAFC;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+        }
+
+        .milestone-item {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .milestone-badge {
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .ms-start { background: #DBEAFE; color: #1E40AF; border: 1px solid #93C5FD; }
+        .ms-obra { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+        .ms-end { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
+
+        .milestone-text {
+            font-size: 0.82rem;
+            color: var(--text-main);
+        }
+
+        .milestone-text strong {
+            display: block;
+            font-size: 0.86rem;
+        }
+
+        /* Filter Legend */
+        .gantt-legend {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.55rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .legend-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-right: 0.25rem;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.32rem 0.7rem;
+            border-radius: 999px;
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+        }
+
+        .legend-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .legend-item.active-filter {
+            background: var(--primary-dark);
+            color: var(--white);
+            border-color: var(--primary-dark);
+        }
+
+        .legend-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* Area Colors */
+        .color-infra { background-color: var(--c-infra); color: white; }
+        .color-maint { background-color: var(--c-maint); color: white; }
+        .color-eglobal { background-color: var(--c-eglobal); color: white; }
+        .color-seguridad { background-color: var(--c-seguridad); color: white; }
+        .color-operaciones { background-color: var(--c-operaciones); color: white; }
+        .color-admin { background-color: var(--c-admin); color: white; }
+        .color-contable { background-color: var(--c-contable); color: white; }
+
+        /* Gantt Table */
+        .gantt-wrapper {
+            overflow-x: auto;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            background: var(--white);
+        }
+
+        .gantt-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1080px;
+        }
+
+        .gantt-table th {
+            background-color: #F8FAFC;
+            color: var(--text-main);
+            padding: 0.65rem 0.4rem;
+            text-align: center;
+            border: 1px solid var(--border-subtle);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .gantt-table th.col-today {
+            background-color: #ECFDF5;
+            border-bottom: 2px solid #10B981;
+        }
+
+        .gantt-table th.col-progress {
+            width: 135px;
+            background-color: #F0FDF4;
+            color: var(--primary-dark);
+        }
+
+        .gantt-table th .day-tag {
+            display: block;
+            font-size: 0.66rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .gantt-table th .date-main {
+            display: block;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.88rem;
+        }
+
+        .gantt-table th .day-name {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            font-weight: 500;
+            margin-top: 1px;
+        }
+
+        .gantt-table th:first-child {
+            text-align: left;
+            width: 27%;
+            padding: 0.8rem 1rem;
+            background-color: #F8FAFC;
+        }
+
+        .gantt-table td {
+            border: 1px solid var(--border-subtle);
+            padding: 0.3rem;
+            height: 44px;
+            background-color: var(--white);
+            vertical-align: middle;
+        }
+
+        .gantt-table tbody tr:hover td {
+            background-color: #F8FAFC;
+        }
+
+        .gantt-table .task-name {
+            font-weight: 600;
+            font-size: 0.84rem;
+            padding: 0.6rem 1rem;
+            color: var(--text-main);
+        }
+
+        .task-phase {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-right: 0.4rem;
+        }
+
+        /* Cell Progress Styling */
+        .cell-progress {
+            padding: 0.4rem 0.65rem !important;
+            text-align: center;
+        }
+
+        .pct-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .pct-badge {
+            font-size: 0.73rem;
+            font-weight: 700;
+            padding: 1px 7px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .pct-done { background: #DCFCE7; color: #166534; }
+        .pct-active { background: #FEF3C7; color: #92400E; }
+        .pct-pending { background: #F1F5F9; color: #64748B; }
+
+        .pct-track {
+            width: 100%;
+            height: 6px;
+            background: #E2E8F0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .pct-bar-done { height: 100%; background: #16A34A; border-radius: 999px; }
+        .pct-bar-active { height: 100%; background: #D97706; border-radius: 999px; }
+        .pct-bar-pending { height: 100%; background: #94A3B8; border-radius: 999px; }
+
+        /* Total Row Footer inside Gantt */
+        .gantt-table tfoot td {
+            background: #F0FDF4;
+            border-top: 2px solid #86EFAC;
+            padding: 0.85rem 1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .total-summary-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .total-progress-track {
+            flex: 1;
+            height: 14px;
+            background: #DCFCE7;
+            border: 1px solid #86EFAC;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .total-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1B4D2E 0%, #16A34A 100%);
+            border-radius: 999px;
+            width: 33.1%;
+        }
+
+        .total-summary-note {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #166534;
+            white-space: nowrap;
+        }
+
+        .gantt-bar {
+            border-radius: 6px;
+            padding: 0.36rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 28px;
+        }
+
+        /* Responsables Grid */
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 1.15rem;
+        }
+
+        .role-card {
+            background: var(--white);
+            border: 1px solid var(--border-subtle);
+            border-top: 4px solid var(--primary);
+            padding: 1.25rem;
+            border-radius: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+        }
+
+        .role-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
+        }
+
+        .role-card.b-infra { border-top-color: var(--c-infra); }
+        .role-card.b-maint { border-top-color: var(--c-maint); }
+        .role-card.b-admin { border-top-color: var(--c-admin); }
+        .role-card.b-eglobal { border-top-color: var(--c-eglobal); }
+        .role-card.b-operaciones { border-top-color: var(--c-operaciones); }
+        .role-card.b-contable { border-top-color: var(--c-contable); }
+
+        .role-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .role-title {
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 1.02rem;
+        }
+
+        .badge {
+            background: var(--mint-light);
+            color: var(--primary);
+            border: 1px solid var(--mint-border);
+            padding: 0.2rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .leader-box {
+            font-size: 0.84rem;
+            color: var(--text-main);
+            background: #F8FAFC;
+            padding: 0.45rem 0.7rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .role-card ul {
+            padding-left: 1.15rem;
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        /* View 2: Informacion Relevante Suministrada por Respondientes */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .info-card {
+            background: var(--white);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-card-header {
+            padding: 1rem 1.25rem;
+            background: #F8FAFC;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .info-card-title {
+            font-weight: 700;
+            font-size: 0.98rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card-body {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            flex: 1;
+        }
+
+        .placeholder-drop {
+            border: 2px dashed #CBD5E1;
+            background: #F8FAFC;
+            border-radius: 10px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.84rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .placeholder-drop span {
+            font-size: 1.6rem;
+        }
+
+        /* Spec Grid & Image Styles for Tab 2 */
+        .respondent-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            background: #F0FDFA;
+            border: 1px solid #99F6E4;
+            border-left: 4px solid var(--c-contable);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #134E4A;
+        }
+
+        .respondent-banner.eglobal-banner {
+            background: #F5F3FF;
+            border-color: #DDD6FE;
+            border-left-color: var(--c-eglobal);
+            color: #4C1D95;
+        }
+
+        .dian-img-container {
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            overflow: hidden;
+            background: #FFFFFF;
+            padding: 0.5rem;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
+            text-align: center;
+        }
+
+        .dian-img-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .specs-summary-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.85rem;
+            background: #F8FAFC;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .spec-highlight {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .spec-highlight span {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .spec-highlight strong {
+            font-size: 0.92rem;
+            color: var(--text-main);
+        }
+
+        .specs-components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .spec-item-box {
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 1rem 1.15rem;
+            background: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .spec-item-box h4 {
+            font-size: 0.92rem;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 0.4rem;
+        }
+
+        .spec-item-box h4 .ip-tag {
+            font-size: 0.7rem;
+            background: #EDE9FE;
+            color: #5B21B6;
+            padding: 2px 7px;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .spec-item-box ul {
+            padding-left: 1.1rem;
+            font-size: 0.81rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 0.22rem;
+        }
+
+        .btn-pdf {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--c-eglobal);
+            color: white;
+            text-decoration: none;
+            padding: 0.45rem 0.95rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .btn-pdf:hover {
+            opacity: 0.9;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 0.75rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 992px) {
+            body { flex-direction: column; }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .sidebar-nav {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+            .main-wrapper {
+                max-width: 100%;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra Lateral Izquierda (Pestañas de Navegación) -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-logo">
+                <img src="logo.png" alt="Primavera Urbana Logo">
+            </div>
+            <div>
+                <div class="sidebar-brand-title">Proyecto Cajeros Automáticos #030-26</div>
+                <div class="sidebar-brand-sub">Panel de Control y Documentación</div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="sidebar-section-label">Módulos del Proyecto</div>
+
+            <button class="nav-tab active" onclick="switchTab('tab-cronograma', this)">
+                <span class="nav-tab-icon">📅</span>
+                <div class="nav-tab-text">
+                    <span class="nav-tab-title">Cronograma de Actividades</span>
+                    <span class="nav-tab-desc">Gantt, % de avance diario y directorio</span>
+                </div>
+            </button>
+
+            <button class="nav-tab" onclick="switchTab('tab-info', this)">
+                <span class="nav-tab-icon">📂</span>
+                <div class="nav-tab-text">
+                    <span class="nav-tab-title">Información Relevante del Proyecto</span>
+                    <span class="nav-tab-desc">Suministrada por los respondientes (Fotos, fichas técnicas, DIAN)</span>
+                </div>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <strong>Estado General: 33.1%</strong>
+            Iniciado el Miércoles 21 de Octubre<br>
+            Actualización diaria de avance
+        </div>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <main class="main-wrapper">
+
+        <!-- Header Superior -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <div class="status-pill">
+                    <span class="status-dot"></span> En Ejecución • Iniciado el Miércoles 21 de Octubre
+                </div>
+                <h1 id="page-title">Cronograma de Actividades y Control de Avance</h1>
+                <p>CONTRATO DE COMPRAVENTA E INSTALACIÓN DE 4 PUNTOS DE PAGO AUTOMÁTICOS # 030-26</p>
+            </div>
+        </header>
+
+        <!-- ========================================================= -->
+        <!-- PESTAÑA 1: CRONOGRAMA DE ACTIVIDADES                      -->
+        <!-- ========================================================= -->
+        <div id="tab-cronograma" class="tab-view active">
+
+            <!-- KPI Summary Row -->
+            <div class="kpi-grid">
+                <div class="kpi-card progress-kpi">
+                    <div class="kpi-info">
+                        <div class="kpi-label">% Alcance Total del Proyecto</div>
+                        <div class="kpi-value">33.1% de Avance</div>
+                        <div class="kpi-progress-bar">
+                            <div class="kpi-progress-fill"></div>
+                        </div>
+                        <div class="kpi-sub">3 completadas • 2 en proceso • 8 en 0%</div>
+                    </div>
+                    <div class="kpi-icon">📈</div>
+                </div>
+
+                <div class="kpi-card highlight">
+                    <div class="kpi-info">
+                        <div class="kpi-label">Inicio de Actividades</div>
+                        <div class="kpi-value">Mié 21 de Octubre</div>
+                        <div class="kpi-sub">Recepción equipos y alistamiento</div>
+                    </div>
+                    <div class="kpi-icon">🚀</div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-info">
+                        <div class="kpi-label">Obra Civil y Adecuación</div>
+                        <div class="kpi-value">21 al 25 de Octubre</div>
+                        <div class="kpi-sub">Desmonte (70%), muro y acabados</div>
+                    </div>
+                    <div class="kpi-icon">🛠️</div>
+                </div>
+
+                <div class="kpi-card purple">
+                    <div class="kpi-info">
+                        <div class="kpi-label">Montaje E GLOBAL</div>
+                        <div class="kpi-value">Lun 26 Oct (Tentativa)</div>
+                        <div class="kpi-sub">4 Cajeros + Reubicación Motos</div>
+                    </div>
+                    <div class="kpi-icon">🏧</div>
+                </div>
+
+                <div class="kpi-card warning">
+                    <div class="kpi-info">
+                        <div class="kpi-label">Cierre Contable / DIAN</div>
+                        <div class="kpi-value">Mar 27 de Octubre</div>
+                        <div class="kpi-sub">Resoluciones DIAN y operación</div>
+                    </div>
+                    <div class="kpi-icon">📋</div>
+                </div>
+            </div>
+
+            <!-- Cronograma Gantt Panel -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Cronograma Maestro de Actividades (21 al 27 de Octubre)</h2>
+                </div>
+
+                <!-- Apartado de % de Avance Diario -->
+                <div class="progress-notice">
+                    <div class="progress-notice-left">
+                        <div class="progress-notice-icon">%</div>
+                        <div>
+                            <strong>Control y Seguimiento de Ejecución:</strong> El <strong>% de avance</strong> se actualizará de manera diaria conforme al reporte de cada área responsable.
+                        </div>
+                    </div>
+                    <span class="progress-notice-badge">🔄 El % de avance se actualizará de manera diaria</span>
+                </div>
+
+                <!-- Hitos Clave -->
+                <div class="milestone-bar">
+                    <div class="milestone-item">
+                        <span class="milestone-badge ms-start">Mié 21 Oct</span>
+                        <div class="milestone-text">
+                            <strong>Inicio de Labores (21 de Octubre)</strong>
+                            Asignación de tablets (100%), retiro de dinero (100%), aire (100%), equipos TI (60%) y desmonte (70%).
+                        </div>
+                    </div>
+                    <div class="milestone-item">
+                        <span class="milestone-badge ms-obra">23 al 25 Oct</span>
+                        <div class="milestone-text">
+                            <strong>Obra Civil y Acabados</strong>
+                            Montaje de muro estructural en punto central y acabados de pintura e iluminación.
+                        </div>
+                    </div>
+                    <div class="milestone-item">
+                        <span class="milestone-badge ms-end">Lun 26 Oct (Tent.)</span>
+                        <div class="milestone-text">
+                            <strong>Montaje E GLOBAL y Posterior DIAN (27 Oct)</strong>
+                            Instalación de cajeros el Lunes 26 Oct (fecha tentativa) y resoluciones DIAN el 27 Oct.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtros por Área -->
+                <div class="gantt-legend">
+                    <span class="legend-label">Filtrar por área:</span>
+                    <div class="legend-item active-filter" onclick="filterArea('all', this)">Todas las áreas</div>
+                    <div class="legend-item" onclick="filterArea('infra', this)"><div class="legend-color color-infra"></div> Infraestructura TI</div>
+                    <div class="legend-item" onclick="filterArea('maint', this)"><div class="legend-color color-maint"></div> Mantenimiento</div>
+                    <div class="legend-item" onclick="filterArea('admin', this)"><div class="legend-color color-admin"></div> Administración</div>
+                    <div class="legend-item" onclick="filterArea('seguridad', this)"><div class="legend-color color-seguridad"></div> Supervisores Parq.</div>
+                    <div class="legend-item" onclick="filterArea('operaciones', this)"><div class="legend-color color-operaciones"></div> Operaciones</div>
+                    <div class="legend-item" onclick="filterArea('eglobal', this)"><div class="legend-color color-eglobal"></div> E GLOBAL</div>
+                    <div class="legend-item" onclick="filterArea('contable', this)"><div class="legend-color color-contable"></div> Área Contable</div>
+                </div>
+
+                <!-- Tabla Gantt -->
+                <div class="gantt-wrapper">
+                    <table class="gantt-table" id="gantt-table">
+                        <thead>
+                            <tr>
+                                <th>Actividad / Fase</th>
+                                <th class="col-progress">
+                                    <span class="day-tag">Seguimiento</span>
+                                    <span class="date-main">% de Avance</span>
+                                    <span class="day-name">Corte Diario</span>
+                                </th>
+                                <th>
+                                    <span class="day-tag">Día 1 (Inicio)</span>
+                                    <span class="date-main">21 Oct</span>
+                                    <span class="day-name">Miércoles</span>
+                                </th>
+                                <th class="col-today">
+                                    <span class="day-tag">Día 2 (Hoy)</span>
+                                    <span class="date-main">22 Oct</span>
+                                    <span class="day-name">Jueves</span>
+                                </th>
+                                <th>
+                                    <span class="day-tag">Día 3</span>
+                                    <span class="date-main">23 Oct</span>
+                                    <span class="day-name">Viernes</span>
+                                </th>
+                                <th>
+                                    <span class="day-tag">Día 4</span>
+                                    <span class="date-main">24 Oct</span>
+                                    <span class="day-name">Sábado</span>
+                                </th>
+                                <th>
+                                    <span class="day-tag">Día 5</span>
+                                    <span class="date-main">25 Oct</span>
+                                    <span class="day-name">Domingo</span>
+                                </th>
+                                <th>
+                                    <span class="day-tag">Día 6 (Tentativa)</span>
+                                    <span class="date-main">26 Oct</span>
+                                    <span class="day-name">Lunes</span>
+                                </th>
+                                <th>
+                                    <span class="day-tag">Día 7</span>
+                                    <span class="date-main">27 Oct</span>
+                                    <span class="day-name">Martes</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 01 -->
+                            <tr data-area="admin">
+                                <td class="task-name"><span class="task-phase">01</span> Llegada y almacenamiento de cajeros (Bodega SS)</td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-pending">0%</span>
+                                        <div class="pct-track"><div class="pct-bar-pending" style="width:0%"></div></div>
+                                    </div>
+                                </td>
+                                <td colspan="1"><div class="gantt-bar color-admin">Coord. Administrativa</div></td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                            <!-- 02 -->
+                            <tr data-area="infra">
+                                <td class="task-name"><span class="task-phase">02</span> Asignación tablets a supervisores parqueadero SS</td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-done">100%</span>
+                                        <div class="pct-track"><div class="pct-bar-done" style="width:100%"></div></div>
+                                    </div>
+                                </td>
+                                <td colspan="1"><div class="gantt-bar color-infra">Infraestructura TI</div></td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                            <!-- 03 -->
+                            <tr data-area="infra">
+                                <td class="task-name"><span class="task-phase">03</span> Retirar equipos tecnológicos</td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-active">60% (En proceso)</span>
+                                        <div class="pct-track"><div class="pct-bar-active" style="width:60%"></div></div>
+                                    </div>
+                                </td>
+                                <td colspan="2"><div class="gantt-bar color-infra">Infraestructura TI</div></td>
+                                <td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                            <!-- 04 -->
+                            <tr data-area="seguridad">
+                                <td class="task-name"><span class="task-phase">04</span> Retirar dinero de los cajeros</td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-done">100%</span>
+                                        <div class="pct-track"><div class="pct-bar-done" style="width:100%"></div></div>
+                                    </div>
+                                </td>
+                                <td colspan="2"><div class="gantt-bar color-seguridad">Supervisores Parqueadero</div></td>
+                                <td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                            <!-- 05 -->
+                            <tr data-area="operaciones">
+                                <td class="task-name"><span class="task-phase">05</span> Retirar Aire acondicionado</td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-done">100%</span>
+                                        <div class="pct-track"><div class="pct-bar-done" style="width:100%"></div></div>
+                                    </div>
+                                </td>
+                                <td colspan="2"><div class="gantt-bar color-operaciones">Operaciones (Climante)</div></td>
+                                <td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                            <!-- 06 -->
+                            <tr data-area="maint">
+                                <td class="task-name"><span class="task-phase">06</span> Iniciar desmonte de estructura</td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-active">70% (En proceso)</span>
+                                        <div class="pct-track"><div class="pct-bar-active" style="width:70%"></div></div>
+                                    </div>
+                                </td>
+                                <td colspan="2"><div class="gantt-bar color-maint">Mantenimiento</div></td>
+                                <td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                            <!-- 07 -->
+                            <tr data-area="maint">
+                                <td class="task-name"><span class="task-phase">07</span> Realizar Perforaciones Saca Núcleos</td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-pending">0%</span>
+                                        <div class="pct-track"><div class="pct-bar-pending" style="width:0%"></div></div>
+                                    </div>
+                                </td>
+                                <td></td>
+                                <td colspan="1"><div class="gantt-bar color-maint">Mantenimiento</div></td>
+                                <td></td><td></td><td></td><td></td><td></td>
+                            </tr>
+                            <!-- 08 -->
+                            <tr data-area="maint">
+                                <td class="task-name"><span class="task-phase">08</span> Montaje de Muro estructural punto central</td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-pending">0%</span>
+                                        <div class="pct-track"><div class="pct-bar-pending" style="width:0%"></div></div>
+                                    </div>
+                                </td>
+                                <td></td><td></td>
+                                <td colspan="2"><div class="gantt-bar color-maint">Mantenimiento</div></td>
+                                <td></td><td></td><td></td>
+                            </tr>
+                            <!-- 09 -->
+                            <tr data-area="maint">
+                                <td class="task-name"><span class="task-phase">09</span> Finalización y acabados (Pintura e iluminación)</td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-pending">0%</span>
+                                        <div class="pct-track"><div class="pct-bar-pending" style="width:0%"></div></div>
+                                    </div>
+                                </td>
+                                <td></td><td></td><td></td><td></td>
+                                <td colspan="1"><div class="gantt-bar color-maint">Mantenimiento</div></td>
+                                <td></td><td></td>
+                            </tr>
+                            <!-- 10 -->
+                            <tr data-area="eglobal">
+                                <td class="task-name"><span class="task-phase">10</span> Montaje y configuración de Cajeros Automáticos <em>(Fecha tentativa)</em></td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-pending">0%</span>
+                                        <div class="pct-track"><div class="pct-bar-pending" style="width:0%"></div></div>
+                                    </div>
+                                </td>
+                                <td></td><td></td><td></td><td></td><td></td>
+                                <td colspan="1"><div class="gantt-bar color-eglobal">E GLOBAL (Tentativa)</div></td>
+                                <td></td>
+                            </tr>
+                            <!-- 11 -->
+                            <tr data-area="eglobal">
+                                <td class="task-name"><span class="task-phase">11</span> Reubicación Cajero Falabella a Zona Motos <em>(Fecha tentativa)</em></td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-pending">0%</span>
+                                        <div class="pct-track"><div class="pct-bar-pending" style="width:0%"></div></div>
+                                    </div>
+                                </td>
+                                <td></td><td></td><td></td><td></td><td></td>
+                                <td colspan="1"><div class="gantt-bar color-eglobal">E GLOBAL (Tentativa)</div></td>
+                                <td></td>
+                            </tr>
+                            <!-- 12 -->
+                            <tr data-area="contable">
+                                <td class="task-name"><span class="task-phase">12</span> Asignación de equipos, resoluciones DIAN y configuración de operación</td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-pending">0%</span>
+                                        <div class="pct-track"><div class="pct-bar-pending" style="width:0%"></div></div>
+                                    </div>
+                                </td>
+                                <td></td><td></td><td></td><td></td><td></td><td></td>
+                                <td colspan="1"><div class="gantt-bar color-contable">Área Contable - Luisa Méndez</div></td>
+                            </tr>
+                            <!-- TR -->
+                            <tr data-area="admin">
+                                <td class="task-name"><span class="task-phase">TR</span> Incorporación de datáfonos UN20 <em>(Actividad Transversal)</em></td>
+                                <td class="cell-progress">
+                                    <div class="pct-wrap">
+                                        <span class="pct-badge pct-pending">0%</span>
+                                        <div class="pct-track"><div class="pct-bar-pending" style="width:0%"></div></div>
+                                    </div>
+                                </td>
+                                <td colspan="7"><div class="gantt-bar color-admin">Administración - Tesorería (Omar Pulido)</div></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>SUMATORIA DEL % DEL ALCANCE DEL PROYECTO</td>
+                                <td style="text-align: center; font-size: 1rem; color: #166534;">33.1%</td>
+                                <td colspan="7">
+                                    <div class="total-summary-bar">
+                                        <div class="total-progress-track">
+                                            <div class="total-progress-fill"></div>
+                                        </div>
+                                        <span class="total-summary-note">Alcance Total del Proyecto: 33.1% (430% acumulado / 13 actividades)</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Directorio de Responsabilidades Panel -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Directorio de Responsabilidades por Área</h2>
+                </div>
+
+                <div class="roles-grid">
+                    <!-- Infraestructura TI -->
+                    <div class="role-card b-infra">
+                        <div class="role-header">
+                            <span class="role-title">Infraestructura TI</span>
+                            <span class="badge">Soporte y Supervisión</span>
+                        </div>
+                        <div class="leader-box"><strong>Líder:</strong> Ing. Miller Santos</div>
+                        <p style="font-weight: 600; font-size: 0.84rem;">Responsabilidades:</p>
+                        <ul>
+                            <li>Supervisión del proceso.</li>
+                            <li>Entrega de puntos de RED y puntos WIFI para cada punto de pago.</li>
+                            <li>Retoma de equipos tecnológicos.</li>
+                            <li>Asignación medios tecnológicos (Tablets).</li>
+                            <li><strong>Entregable final:</strong> Informe de instalación.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Mantenimiento -->
+                    <div class="role-card b-maint">
+                        <div class="role-header">
+                            <span class="role-title">Mantenimiento</span>
+                            <span class="badge">Operativo y Obra</span>
+                        </div>
+                        <div class="leader-box"><strong>Líder:</strong> Ing. Cristian Agudelo</div>
+                        <p style="font-weight: 600; font-size: 0.84rem;">Responsabilidades:</p>
+                        <ul>
+                            <li>Desmontaje y montaje de estructura.</li>
+                            <li>Entrega de punto eléctrico.</li>
+                            <li>Finalización y acabados (Pintura e iluminación).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Administración -->
+                    <div class="role-card b-admin">
+                        <div class="role-header">
+                            <span class="role-title">Administración</span>
+                            <span class="badge">Logística y Tesorería</span>
+                        </div>
+                        <div class="leader-box">
+                            <strong>Líderes:</strong><br>
+                            • Coord. Administrativa: Eliana Molina<br>
+                            • Tesorería: Omar Pulido
+                        </div>
+                        <p style="font-weight: 600; font-size: 0.84rem;">Responsabilidades:</p>
+                        <ul>
+                            <li>Custodia del equipo y del sitio (Almacén y Custodia).</li>
+                            <li>Incorporación de datáfonos UN20 (Tesorería).</li>
+                        </ul>
+                    </div>
+
+                    <!-- E GLOBAL -->
+                    <div class="role-card b-eglobal">
+                        <div class="role-header">
+                            <span class="role-title">E GLOBAL S.A.S</span>
+                            <span class="badge">Proveedor Especialista</span>
+                        </div>
+                        <div class="leader-box"><strong>Líder:</strong> E GLOBAL TECHNOLOGY</div>
+                        <p style="font-weight: 600; font-size: 0.84rem;">Responsabilidades:</p>
+                        <ul>
+                            <li>Instalación y configuración cajeros automáticos.</li>
+                            <li>Capacitaciones.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Área Contable -->
+                    <div class="role-card b-contable">
+                        <div class="role-header">
+                            <span class="role-title">Área Contable</span>
+                            <span class="badge">Contabilidad / DIAN</span>
+                        </div>
+                        <div class="leader-box"><strong>Líder:</strong> Luisa Fernanda Méndez Rodríguez</div>
+                        <p style="font-weight: 600; font-size: 0.84rem;">Responsabilidades:</p>
+                        <ul>
+                            <li>Desglose oficial de la asignación actual de los equipos.</li>
+                            <li>Resoluciones DIAN asociadas y configuración de la operación tras la ejecución de los cambios.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Climante / Operaciones -->
+                    <div class="role-card b-operaciones">
+                        <div class="role-header">
+                            <span class="role-title">Climante</span>
+                            <span class="badge">Operaciones</span>
+                        </div>
+                        <div class="leader-box"><strong>Líder:</strong> Ing. Camilo Cediel</div>
+                        <p style="font-weight: 600; font-size: 0.84rem;">Responsabilidades:</p>
+                        <ul>
+                            <li>Supervisión y seguimiento al contratista Climante durante el desmonte del aire acondicionado.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- PESTAÑA 2: INFORMACIÓN RELEVANTE SUMINISTRADA             -->
+        <!-- ========================================================= -->
+        <div id="tab-info" class="tab-view">
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Información Relevante del Proyecto Suministrada por los Respondientes</h2>
+                </div>
+
+                <div class="progress-notice" style="margin-bottom: 1.5rem;">
+                    <div class="progress-notice-left">
+                        <div class="progress-notice-icon">📂</div>
+                        <div>
+                            <strong>Repositorio Técnico, Fotográfico y Documental:</strong> Espacio consolidado con las fichas técnicas, registro fotográfico de avances, resoluciones DIAN y soportes entregados por cada líder de área.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <!-- 1. Desglose Contable y Resoluciones DIAN (Área Contable - Luisa Fernanda Méndez) -->
+                    <div class="info-card" style="grid-column: 1 / -1;">
+                        <div class="info-card-header">
+                            <div class="info-card-title">📋 Renovación y Reubicación de Cajeros de Parqueadero (Resoluciones DIAN)</div>
+                            <span class="badge" style="background:#CCFBF1; color:#0F766E; border-color:#5EEAD4;">Área Contable • Luisa Fernanda Méndez Rodríguez</span>
+                        </div>
+                        <div class="info-card-body">
+                            <div class="respondent-banner">
+                                <div>
+                                    <strong>📌 Imagen compartida por parte del Área Contable (Luisa Fernanda Méndez Rodríguez):</strong>
+                                    Desglose oficial de la asignación actual de los equipos (8 puntos de pago), sus resoluciones DIAN asociadas y cómo quedará configurada la operación (7 puntos de pago optimizados) tras la ejecución de los cambios.
+                                </div>
+                                <a href="resoluciones_dian_luisa.png" target="_blank" class="btn-pdf" style="background: var(--c-contable);">🔍 Ver Imagen en Tamaño Completo</a>
+                            </div>
+
+                            <div class="dian-img-container">
+                                <img src="resoluciones_dian_luisa.png" alt="Comparativo de Distribución Actual vs. Propuesta por Resolución DIAN - Área Contable">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Ficha Técnica de los Equipos (Proveedor E-Global) -->
+                    <div class="info-card" style="grid-column: 1 / -1;">
+                        <div class="info-card-header">
+                            <div class="info-card-title">📑 Ficha Técnica Oficial - Punto de Pago Automático</div>
+                            <span class="badge" style="background:#EDE9FE; color:#5B21B6; border-color:#C4B5FD;">Proveedor • E-GLOBAL TECHNOLOGY S.A.S</span>
+                        </div>
+                        <div class="info-card-body">
+                            <div class="respondent-banner eglobal-banner">
+                                <div>
+                                    <strong>📌 Ficha técnica entregada por el proveedor E-Global:</strong>
+                                    Equipo de autoservicio para el pago de estacionamiento con interfaz táctil e integración con múltiples medios de pago (efectivo, monedas, tarjeta, QR), operación 24/7.
+                                </div>
+                                <a href="ficha_tecnica_eglobal.pdf" target="_blank" class="btn-pdf">📄 Abrir PDF Original (Ficha Técnica E-Global)</a>
+                            </div>
+
+                            <!-- Resumen General del Gabinete -->
+                            <div class="specs-summary-bar">
+                                <div class="spec-highlight">
+                                    <span>Dimensiones Generales</span>
+                                    <strong>1810 (Alto) × 567 (Ancho) × 711 (Prof.) mm</strong>
+                                </div>
+                                <div class="spec-highlight">
+                                    <span>Peso y Estructura</span>
+                                    <strong>Aprox. 220 KG • Acero Cold Rolled (Anclado a piso)</strong>
+                                </div>
+                                <div class="spec-highlight">
+                                    <span>Grado de Protección Gabinete</span>
+                                    <strong>Rack en Acero Cold Rolled con IP54</strong>
+                                </div>
+                                <div class="spec-highlight">
+                                    <span>Medios de Pago Soportados</span>
+                                    <strong>Billetes, Monedas, Tarjeta (Datáfono), Código QR</strong>
+                                </div>
+                            </div>
+
+                            <!-- Componentes Detallados de la Ficha Técnica -->
+                            <div class="specs-components-grid">
+                                <div class="spec-item-box">
+                                    <h4>🖥️ Monitor Táctil 32" & PC Industrial <span class="ip-tag">IP44</span></h4>
+                                    <ul>
+                                        <li><strong>Marca / Ref:</strong> JHCTECH KMDA-3201</li>
+                                        <li><strong>Procesador:</strong> Intel Core i3 6100 @ 2.3GHz</li>
+                                        <li><strong>Memoria y Disco:</strong> 4 GB RAM DDR4 2133MHz • SSD 120 GB</li>
+                                        <li><strong>Sistema Operativo:</strong> Windows 10 Pro 64 bits</li>
+                                        <li><strong>Conectividad:</strong> 3× LAN 1000 Mbps, 6× RS232/422/485 COM, 1× HDMI 2.0, 4× USB 3.0, 3× USB 2.0</li>
+                                    </ul>
+                                </div>
+
+                                <div class="spec-item-box">
+                                    <h4>💵 Manejo de Billetes - FUJITSU GSR50 <span class="ip-tag">IP44</span></h4>
+                                    <ul>
+                                        <li><strong>Velocidad:</strong> Depósito y dispensación de 3 billetes/segundo</li>
+                                        <li><strong>Transacción:</strong> Depósito hasta 50 billetes / Dispensación 20 billetes</li>
+                                        <li><strong>Recicladores:</strong> 3 cassettes de reciclaje × 120 billetes c/u (hasta 6 denominaciones)</li>
+                                        <li><strong>Capacidad Cassettes:</strong> Carga opc. 500 billetes / Cash Box hasta 1.500 billetes</li>
+                                        <li><strong>Interfaz / Energía:</strong> USB 2.0, CEN/XFS • DC +24V ±10% (Máx 12.7A) • Peso: 25 Kg</li>
+                                    </ul>
+                                </div>
+
+                                <div class="spec-item-box">
+                                    <h4>🪙 Dispensador y Validador de Monedas <span class="ip-tag">IP44</span></h4>
+                                    <ul>
+                                        <li><strong>Hopper - Azkoyen (4 por cajero):</strong> Desembolso de alta velocidad de hasta 9 monedas/seg, barrera infrarroja y sistema anti-atasco.</li>
+                                        <li><strong>Validador - Crane CPI:</strong> Velocidad de 2 a 6 monedas/seg, hasta 32 canales, diámetro 15–31.5 mm.</li>
+                                        <li><strong>Capacidad Tolva:</strong> 600 unidades (moneda grande) a 1.200 unidades (moneda pequeña).</li>
+                                    </ul>
+                                </div>
+
+                                <div class="spec-item-box">
+                                    <h4>🧾 Impresora Térmica - Custom <span class="ip-tag">Alta Vel.</span></h4>
+                                    <ul>
+                                        <li><strong>Resolución y Velocidad:</strong> 203 dpi (8 dots/mm) • Velocidad >250 mm/seg</li>
+                                        <li><strong>Papel:</strong> Ancho 50 a 82.5 mm • Gramaje 55–110 g/m² • Rollo máx. 150 mm (250 mm opc.)</li>
+                                        <li><strong>Confiabilidad:</strong> Vida cabezal 200 Km / MCBF 1.000.000 cortes / MTBF 450.000 horas</li>
+                                        <li><strong>Interfaces:</strong> RS232 + USB / ETH + USB • Alimentación 24 Vdc</li>
+                                    </ul>
+                                </div>
+
+                                <div class="spec-item-box">
+                                    <h4>📹 Sistema de Cámaras HIKVISION <span class="ip-tag">IP44</span></h4>
+                                    <ul>
+                                        <li><strong>Mini Cámara de Red 2 MP:</strong> 1920×1080 a 30 fps, H.265+, 120dB WDR, detección de rostros y 6 análisis de comportamiento.</li>
+                                        <li><strong>Mini Cámara IP 1 MP:</strong> 1280×720, CMOS 1/4", compresión H.264/MJPEG, compatible con NVR Hikvision y protocolo ONVIF.</li>
+                                    </ul>
+                                </div>
+
+                                <div class="spec-item-box">
+                                    <h4>🔒 Seguridad, Control y Periféricos <span class="ip-tag">IP44 / IP53</span></h4>
+                                    <ul>
+                                        <li><strong>Cerradura Electrónica 39E ComboGard Pro:</strong> Combinación de 6 a 9 dígitos, retardo 1–99 min, alarma silenciosa, modo dual y auditoría (hasta 9 usuarios).</li>
+                                        <li><strong>Lector Código de Barras Newland (IP53):</strong> Lectura 1D, PDF y 2D (QR) con reducción de iluminación intensa.</li>
+                                        <li><strong>Lector de Huellas DigitalPersona 4500:</strong> 512 DPI, USB 2.0, datos encriptados y rechazo de huellas falsas.</li>
+                                        <li><strong>PLC + Audio:</strong> Controlador lógico programable (5/4 E/S, RS232/485), Micrófono electret omnidireccional, Parlante y Amplificador 2×20W.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Visor PDF embebido -->
+                            <details style="margin-top: 0.75rem; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.75rem 1rem; background: #F8FAFC;">
+                                <summary style="cursor: pointer; font-weight: 700; font-size: 0.88rem; color: var(--primary-dark);">
+                                    👁️ Desplegar vista previa del documento PDF completo aquí mismo
+                                </summary>
+                                <div style="margin-top: 0.75rem;">
+                                    <embed src="ficha_tecnica_eglobal.pdf" type="application/pdf" width="100%" height="650px" style="border-radius: 6px; border: 1px solid var(--border-subtle);" />
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- 3. Registro Fotográfico y Avance de Obra -->
+                    <div class="info-card" style="grid-column: 1 / -1;">
+                        <div class="info-card-header">
+                            <div class="info-card-title">📸 Registro Fotográfico de Actividades en Sitio</div>
+                            <span class="badge">Infraestructura / Mantenimiento</span>
+                        </div>
+                        <div class="info-card-body">
+                            <p style="font-size: 0.85rem; color: var(--text-muted);">
+                                Evidencias visuales del desmonte de estructura, retiro de equipos, adecuación de puntos centrales y estado de cajeros.
+                            </p>
+                            <div class="placeholder-drop">
+                                <span>🖼️</span>
+                                <strong>Espacio listo para cargar fotografías de avance de obra</strong>
+                                Cuando tengas las fotos del desmonte o instalación, envíalas por aquí para agregarlas.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <footer class="footer">
+            Dashboard de Control y Seguimiento • CONTRATO DE COMPRAVENTA E INSTALACIÓN DE 4 PUNTOS DE PAGO AUTOMÁTICOS # 030-26 • Centro Comercial y Empresarial Primavera Urbana
+        </footer>
+
+    </main>
+
+<script>
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-view').forEach(view => view.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+
+        document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const titleEl = document.getElementById('page-title');
+        if (tabId === 'tab-cronograma') {
+            titleEl.textContent = 'Cronograma de Actividades y Control de Avance';
+        } else {
+            titleEl.textContent = 'Información Relevante Suministrada por los Respondientes';
+        }
+    }
+
+    function filterArea(area, item) {
+        document.querySelectorAll('.gantt-legend .legend-item').forEach(el => el.classList.remove('active-filter'));
+        item.classList.add('active-filter');
+
+        const rows = document.querySelectorAll('#gantt-table tbody tr');
+        rows.forEach(row => {
+            if (area === 'all' || row.getAttribute('data-area') === area) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
